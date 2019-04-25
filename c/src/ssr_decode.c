@@ -130,6 +130,7 @@ bool is_ssr_phase_biases_message(const uint16_t message_num) {
 enum rtcm3_rc_e decode_ssr_header(const uint8_t buff[],
                                   uint16_t *bit,
                                   rtcm_msg_ssr_header *msg_header) {
+  assert(msg_header);
   msg_header->message_num = rtcm_getbitu(buff, *bit, 12);
   *bit += 12;
   uint8_t number_of_bits_for_epoch_time;
@@ -178,6 +179,7 @@ enum rtcm3_rc_e decode_ssr_header(const uint8_t buff[],
  */
 rtcm3_rc rtcm3_decode_orbit_clock(const uint8_t buff[],
                                   rtcm_msg_orbit_clock *msg_orbit_clock) {
+  assert(msg_orbit_clock);
   uint16_t bit = 0;
   if (!(RC_OK == decode_ssr_header(buff, &bit, &msg_orbit_clock->header))) {
     return RC_INVALID_MESSAGE;
@@ -251,6 +253,7 @@ rtcm3_rc rtcm3_decode_orbit_clock(const uint8_t buff[],
  */
 rtcm3_rc rtcm3_decode_code_bias(const uint8_t buff[],
                                 rtcm_msg_code_bias *msg_code_bias) {
+  assert(msg_code_bias);
   uint16_t bit = 0;
   if (!(RC_OK == decode_ssr_header(buff, &bit, &msg_code_bias->header))) {
     return RC_INVALID_MESSAGE;
@@ -296,6 +299,7 @@ rtcm3_rc rtcm3_decode_code_bias(const uint8_t buff[],
  */
 rtcm3_rc rtcm3_decode_phase_bias(const uint8_t buff[],
                                  rtcm_msg_phase_bias *msg_phase_bias) {
+  assert(msg_phase_bias);
   uint16_t bit = 0;
   if (!(RC_OK == decode_ssr_header(buff, &bit, &msg_phase_bias->header))) {
     return RC_INVALID_MESSAGE;
