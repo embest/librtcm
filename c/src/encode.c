@@ -16,6 +16,7 @@
 #include <math.h>
 #include <stdbool.h>
 #include <stdint.h>
+#include <string.h>
 
 #include "rtcm3/bits.h"
 #include "rtcm3/constants.h"
@@ -729,7 +730,8 @@ uint16_t rtcm3_encode_1012(const rtcm_obs_message *msg_1012, uint8_t buff[]) {
 
 uint16_t rtcm3_encode_1029(const rtcm_msg_1029 *msg_1029, uint8_t buff[]) {
   assert(msg_1029);
-  uint16_t bit = 0, byte = 0;
+  uint16_t bit = 0;
+  uint16_t byte = 0;
 
   rtcm_setbitu(buff, bit, 12, 1029);
   bit += 12;
@@ -1098,6 +1100,7 @@ static uint16_t rtcm3_encode_msm_internal(const rtcm_msm_message *msg,
   double cnr[num_cells];
   double fine_range_rate_m_s[num_cells];
   flag_bf flags[num_cells];
+  memset(flags, 0, sizeof(flags));
 
   uint8_t i = 0;
   for (uint8_t sat = 0; sat < num_sats; sat++) {
@@ -1184,7 +1187,7 @@ uint16_t rtcm3_encode_msm5(const rtcm_msm_message *msg_msm5, uint8_t buff[]) {
  * \return Number of bytes written or 0 on failure
  */
 
-rtcm3_rc rtcm3_encode_4062(const rtcm_msg_swift_proprietary *msg,
+uint16_t rtcm3_encode_4062(const rtcm_msg_swift_proprietary *msg,
                            uint8_t buff[]) {
   assert(msg);
   uint16_t bit = 0;
