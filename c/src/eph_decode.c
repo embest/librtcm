@@ -12,6 +12,7 @@
 
 #include "rtcm3/eph_decode.h"
 #include <assert.h>
+#include <stdio.h>
 #include <string.h>
 #include "rtcm3/bits.h"
 
@@ -169,7 +170,7 @@ rtcm3_rc rtcm3_decode_glo_eph(const uint8_t buff[], rtcm_msg_eph *msg_eph) {
   bit += 1;
   msg_eph->ura = rtcm_getbitu(buff, bit, 4);
   bit += 4;
-  /* NT */ rtcm_getbitu(buff, bit, 11);
+  uint16_t NT = rtcm_getbitu(buff, bit, 11);
   bit += 11;
   /* M */ rtcm_getbitu(buff, bit, 2);
   bit += 2;
@@ -181,7 +182,7 @@ rtcm3_rc rtcm3_decode_glo_eph(const uint8_t buff[], rtcm_msg_eph *msg_eph) {
     bit += 11;
     /* Tc */ rtcm_get_sign_magnitude_bit(buff, bit, 32);
     bit += 32;
-    /* N4 */ rtcm_getbitu(buff, bit, 5);
+    uint8_t N4 = rtcm_getbitu(buff, bit, 5);
     bit += 5;
     /* Tgps */ rtcm_get_sign_magnitude_bit(buff, bit, 22);
     bit += 22;
@@ -190,6 +191,23 @@ rtcm3_rc rtcm3_decode_glo_eph(const uint8_t buff[], rtcm_msg_eph *msg_eph) {
     bit += 1;
     /* reserved */ rtcm_getbitu(buff, bit, 7);
     bit += 7;
+    fprintf(stderr,
+            "R%02d N4: %u, NT: %u, t_b: %u, health: %u%u%u\n",
+            msg_eph->sat_id,
+            N4,
+            NT,
+            msg_eph->glo.t_b,
+            bn_msb,
+            mln3,
+            mln5);
+  } else {
+    fprintf(stderr,
+            "R%02d NT: %u, t_b: %u, health: %u%u [Additional Data not set]\n",
+            msg_eph->sat_id,
+            NT,
+            msg_eph->glo.t_b,
+            bn_msb,
+            mln3);
   }
   msg_eph->health_bits = bn_msb | mln3 | mln5;
   return RC_OK;
