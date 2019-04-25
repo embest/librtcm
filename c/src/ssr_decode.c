@@ -100,18 +100,18 @@ enum rtcm3_rc_e get_number_of_bits_for_iode(
 }
 
 /*
-*            TYPE       GPS     GLOASS    GALILEO    QZSS     BEIDOU     SBAS
-*         ----------------------------------------------------------------------
-*
-*          SSR OBT   : 1057      1063      1240*     1246*     1258*       -
-*              CLK   : 1058      1064      1241*     1247*     1259*       -
-*              BIAS  : 1059      1065      1242*     1248*     1260*       -
-*              OBTCLK: 1060      1066      1243*     1249*     1261*       -
-*              URA   : 1061      1067      1244*     1250*     1262*       -
-*              HRCLK : 1062      1068      1245*     1251*     1263*       -
-*              PHBIAS: 1265*     1266*     1267*     1268*     1270*      1269*
-*                    (* means that these RTCM messages are still draft )
-*/
+ *            TYPE       GPS     GLOASS    GALILEO    QZSS     BEIDOU     SBAS
+ *         ----------------------------------------------------------------------
+ *
+ *          SSR OBT   : 1057      1063      1240*     1246*     1258*       -
+ *              CLK   : 1058      1064      1241*     1247*     1259*       -
+ *              BIAS  : 1059      1065      1242*     1248*     1260*       -
+ *              OBTCLK: 1060      1066      1243*     1249*     1261*       -
+ *              URA   : 1061      1067      1244*     1250*     1262*       -
+ *              HRCLK : 1062      1068      1245*     1251*     1263*       -
+ *              PHBIAS: 1265*     1266*     1267*     1268*     1270*      1269*
+ *                    (* means that these RTCM messages are still draft )
+ */
 
 bool is_ssr_orbit_clock_message(const uint16_t message_num) {
   return message_num == 1060 || message_num == 1066 || message_num == 1243 ||
@@ -175,7 +175,7 @@ enum rtcm3_rc_e decode_ssr_header(const uint8_t buff[],
  * \param RTCM message struct
  * \return  - RC_OK : Success
  *          - RC_MESSAGE_TYPE_MISMATCH : Message type mismatch
- *          - RC_INVALID_MESSAGE : Cell mask too large or invalid TOW
+ *          - RC_INVALID_MESSAGE : Unknown constellation
  */
 rtcm3_rc rtcm3_decode_orbit_clock(const uint8_t buff[],
                                   rtcm_msg_orbit_clock *msg_orbit_clock) {
@@ -249,7 +249,7 @@ rtcm3_rc rtcm3_decode_orbit_clock(const uint8_t buff[],
  * \param RTCM message struct
  * \return  - RC_OK : Success
  *          - RC_MESSAGE_TYPE_MISMATCH : Message type mismatch
- *          - RC_INVALID_MESSAGE : Cell mask too large or invalid TOW
+ *          - RC_INVALID_MESSAGE : Unknown constellation
  */
 rtcm3_rc rtcm3_decode_code_bias(const uint8_t buff[],
                                 rtcm_msg_code_bias *msg_code_bias) {
@@ -295,7 +295,7 @@ rtcm3_rc rtcm3_decode_code_bias(const uint8_t buff[],
  * \param RTCM message struct
  * \return  - RC_OK : Success
  *          - RC_MESSAGE_TYPE_MISMATCH : Message type mismatch
- *          - RC_INVALID_MESSAGE : Cell mask too large or invalid TOW
+ *          - RC_INVALID_MESSAGE : Unknown constelation
  */
 rtcm3_rc rtcm3_decode_phase_bias(const uint8_t buff[],
                                  rtcm_msg_phase_bias *msg_phase_bias) {
