@@ -5,7 +5,9 @@ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake" "${CMAKE_CURRENT_LIST_DI
 
 include(GNUInstallDirs)
 include(SwiftCmakeOptions)
-swift_create_project_options()
+swift_create_project_options(
+    HAS_TESTS
+    )
 
 add_subdirectory (src)
 
