@@ -12,6 +12,5 @@ swift_create_project_options(
 add_subdirectory (src)
 
 if(librtcm_BUILD_TESTS)
-  enable_testing()
   add_subdirectory (test)
 endif()
