@@ -9,6 +9,9 @@ swift_create_project_options(
     HAS_TESTS
     )
 
+include(ClangFormat)
+swift_setup_clang_format()
+
 add_subdirectory (src)
 
 if(librtcm_BUILD_TESTS)
