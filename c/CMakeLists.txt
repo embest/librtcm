@@ -12,8 +12,12 @@ swift_create_project_options(
 include(ClangFormat)
 swift_setup_clang_format()
 
+include(ClangTidy)
+
 add_subdirectory (src)
 
 if(librtcm_BUILD_TESTS)
   add_subdirectory (test)
 endif()
+
+swift_setup_clang_tidy()
