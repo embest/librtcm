@@ -13,6 +13,7 @@ include(ClangFormat)
 swift_setup_clang_format()
 
 include(ClangTidy)
+swift_setup_clang_tidy(FILES "src/*.c")
 
 add_subdirectory (src)
 
@@ -20,4 +21,3 @@ if(librtcm_BUILD_TESTS)
   add_subdirectory (test)
 endif()
 
-swift_setup_clang_tidy()

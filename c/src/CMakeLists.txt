@@ -25,7 +25,6 @@ add_library(rtcm
 
 target_link_libraries(rtcm m)
 target_include_directories(rtcm PUBLIC ${PROJECT_SOURCE_DIR}/include)
-swift_target_enable_clang_tidy(rtcm)
 
 target_compile_options(rtcm PRIVATE "-Wall")
 target_compile_options(rtcm PRIVATE "-Wextra")
