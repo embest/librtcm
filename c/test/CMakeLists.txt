@@ -7,5 +7,5 @@ add_custom_command(
     COMMENT "Running unit tests"
     COMMAND rtcm_test
 )
-target_compile_options(rtcm_test PRIVATE "-std=gnu99")
+set_target_properties(rtcm_test PROPERTIES C_STANDARD 99)
 
