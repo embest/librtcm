@@ -14,7 +14,7 @@ include(ClangFormat)
 swift_setup_clang_format()
 
 include(ClangTidy)
-swift_setup_clang_tidy(FILES "src/*.c")
+swift_setup_clang_tidy(PATTERNS "src/*.c")
 
 add_subdirectory (src)
 
