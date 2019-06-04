@@ -24,7 +24,7 @@ add_library(rtcm
   )
 
 target_link_libraries(rtcm m)
-target_include_directories(rtcm PUBLIC ${PROJECT_SOURCE_DIR}/include)
+target_include_directories(rtcm PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>)
 
 target_compile_options(rtcm PRIVATE "-Wall")
 target_compile_options(rtcm PRIVATE "-Wextra")
@@ -50,5 +50,7 @@ if (NOT "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR CMAKE_C_COMPILER_VERSION VE
    target_compile_options(rtcm PRIVATE "-Wfloat-conversion")
 endif()
 
-install(TARGETS rtcm DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR})
-install(FILES ${librtcm_HEADERS} DESTINATION ${CMAKE_INSTALL_FULL_INCLUDEDIR}/rtcm3)
+swift_install_targets(
+    TARGETS rtcm
+    HEADER_DIRS ${PROJECT_SOURCE_DIR}/include/rtcm3
+    )

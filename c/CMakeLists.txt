@@ -1,5 +1,5 @@
-cmake_minimum_required(VERSION 2.8.7)
-project(librtcm)
+cmake_minimum_required(VERSION 3.2)
+project(librtcm LANGUAGES C CXX VERSION 0.2.41)
 
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake" "${CMAKE_CURRENT_LIST_DIR}/cmake/common")
 
@@ -15,6 +15,8 @@ swift_setup_clang_format()
 
 include(ClangTidy)
 swift_setup_clang_tidy(PATTERNS "src/*.c")
+
+include(SwiftPackageHelpers)
 
 add_subdirectory (src)
 
