@@ -18,8 +18,8 @@
 
 uint16_t rtcm3_encode_gps_eph(const rtcm_msg_eph *msg_1019, uint8_t buff[]);
 // uint16_t rtcm3_encode_glo_eph(const uint8_t buff[], rtcm_msg_eph *msg_eph);
-// uint16_t rtcm3_encode_gal_eph(const uint8_t buff[], rtcm_msg_eph *msg_eph);
-// uint16_t rtcm3_encode_gal_eph_fnav(const uint8_t buff[], rtcm_msg_eph *msg_eph);
+uint16_t rtcm3_encode_gal_eph_inav(const rtcm_msg_eph *msg_eph, uint8_t buff[]);
+uint16_t rtcm3_encode_gal_eph_fnav(const rtcm_msg_eph *msg_eph, uint8_t buff[]);
 // uint16_t rtcm3_encode_bds_eph(const uint8_t buff[], rtcm_msg_eph *msg_eph);
 // uint16_t rtcm3_encode_qzss_eph(const uint8_t buff[], rtcm_msg_eph *msg_eph);
 

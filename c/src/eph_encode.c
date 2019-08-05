@@ -84,3 +84,122 @@ uint16_t rtcm3_encode_gps_eph(const rtcm_msg_eph *msg_1019, uint8_t buff[]) {
   /* Round number of bits up to nearest whole byte. */
   return (bit + 7) / 8;
 }
+
+/** Decode an RTCMv3 GAL (common part) Ephemeris Message
+ *
+ * \param buff The input data buffer
+ * \param msg_eph RTCM message struct
+ * \return bit position in the RTCM frame
+ */
+static void rtcm3_encode_gal_eph_common(const rtcm_msg_eph *msg_eph,
+                                        uint8_t buff[],
+                                        uint16_t *bit) {
+  assert(msg_eph);
+  rtcm_setbitu(buff, *bit, 6, msg_eph->sat_id);
+  *bit += 6;
+  rtcm_setbitu(buff, *bit, 12, msg_eph->wn);
+  *bit += 12;
+  rtcm_setbitu(buff, *bit, 10, msg_eph->kepler.iode);
+  *bit += 10;
+  rtcm_setbitu(buff, *bit, 8, msg_eph->ura);
+  *bit += 8;
+  rtcm_setbits(buff, *bit, 14, msg_eph->kepler.inc_dot);
+  *bit += 14;
+  rtcm_setbitu(buff, *bit, 14, msg_eph->kepler.toc);
+  *bit += 14;
+  rtcm_setbits(buff, *bit, 6, msg_eph->kepler.af2);
+  *bit += 6;
+  rtcm_setbits(buff, *bit, 21, msg_eph->kepler.af1);
+  *bit += 21;
+  rtcm_setbits(buff, *bit, 31, msg_eph->kepler.af0);
+  *bit += 31;
+  rtcm_setbits(buff, *bit, 16, msg_eph->kepler.crs);
+  *bit += 16;
+  rtcm_setbits(buff, *bit, 16, msg_eph->kepler.dn);
+  *bit += 16;
+  rtcm_setbits(buff, *bit, 32, msg_eph->kepler.m0);
+  *bit += 32;
+  rtcm_setbits(buff, *bit, 16, msg_eph->kepler.cuc);
+  *bit += 16;
+  rtcm_setbitu(buff, *bit, 32, msg_eph->kepler.ecc);
+  *bit += 32;
+  rtcm_setbits(buff, *bit, 16, msg_eph->kepler.cus);
+  *bit += 16;
+  rtcm_setbitu(buff, *bit, 32, msg_eph->kepler.sqrta);
+  *bit += 32;
+  rtcm_setbitu(buff, *bit, 14, msg_eph->toe);
+  *bit += 14;
+  rtcm_setbits(buff, *bit, 16, msg_eph->kepler.cic);
+  *bit += 16;
+  rtcm_setbits(buff, *bit, 32, msg_eph->kepler.omega0);
+  *bit += 32;
+  rtcm_setbits(buff, *bit, 16, msg_eph->kepler.cis);
+  *bit += 16;
+  rtcm_setbits(buff, *bit, 32, msg_eph->kepler.inc);
+  *bit += 32;
+  rtcm_setbits(buff, *bit, 16, msg_eph->kepler.crc);
+  *bit += 16;
+  rtcm_setbits(buff, *bit, 32, msg_eph->kepler.w);
+  *bit += 32;
+  rtcm_setbits(buff, *bit, 24, msg_eph->kepler.omegadot);
+  *bit += 24;
+}
+
+/** Decode an RTCMv3 GAL (I/NAV message) Ephemeris Message
+ *
+ * \param buff The input data buffer
+ * \param RTCM message struct
+ * \return  - RC_OK : Success
+ *          - RC_MESSAGE_TYPE_MISMATCH : Message type mismatch
+ */
+uint16_t rtcm3_encode_gal_eph_inav(const rtcm_msg_eph *msg_eph, uint8_t buff[]) {
+  assert(msg_eph);
+
+  uint16_t bit = 0;
+  rtcm_setbitu(buff, bit, 12, 1046);
+  bit += 12;
+
+  /* parse common I/NAV and F/NAV part */
+  rtcm3_encode_gal_eph_common(msg_eph, buff, &bit);
+
+  rtcm_setbits(buff, bit, 10, msg_eph->kepler.tgd_gal_s[0]);
+  bit += 10;
+  rtcm_setbits(buff, bit, 10, msg_eph->kepler.tgd_gal_s[1]);
+  bit += 10;
+  rtcm_setbits(buff, bit, 6, msg_eph->health_bits);
+  bit += 6;
+  /* reserved */
+  rtcm_setbits(buff, bit, 2, 0);
+  bit += 2;
+
+  return bit;
+}
+
+/** Decode an RTCMv3 GAL (F/NAV message) Ephemeris Message
+ *
+ * \param buff The input data buffer
+ * \param RTCM message struct
+ * \return  - RC_OK : Success
+ *          - RC_MESSAGE_TYPE_MISMATCH : Message type mismatch
+ */
+uint16_t rtcm3_encode_gal_eph_fnav(const rtcm_msg_eph *msg_eph,
+                                   uint8_t buff[]) {
+  assert(msg_eph);
+
+  uint16_t bit = 0;
+  rtcm_setbitu(buff, bit, 12, 1045);
+  bit += 12;
+
+  /* parse common F/NAV and I/NAV part */
+  rtcm3_encode_gal_eph_common(msg_eph, buff, &bit);
+
+  rtcm_setbits(buff, bit, 10, msg_eph->kepler.tgd_gal_s[0]);
+  bit += 10;
+  rtcm_setbits(buff, bit, 3, msg_eph->health_bits);
+  bit += 3;
+  /* reserved */ 
+  rtcm_setbits(buff, bit, 7, 0);
+  bit += 7;
+
+  return bit;
+}
