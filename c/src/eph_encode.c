@@ -172,7 +172,8 @@ uint16_t rtcm3_encode_gal_eph_inav(const rtcm_msg_eph *msg_eph, uint8_t buff[]) 
   rtcm_setbits(buff, bit, 2, 0);
   bit += 2;
 
-  return bit;
+  /* Round number of bits up to nearest whole byte. */
+  return (bit + 7) / 8;
 }
 
 /** Decode an RTCMv3 GAL (F/NAV message) Ephemeris Message
@@ -201,5 +202,6 @@ uint16_t rtcm3_encode_gal_eph_fnav(const rtcm_msg_eph *msg_eph,
   rtcm_setbits(buff, bit, 7, 0);
   bit += 7;
 
-  return bit;
+  /* Round number of bits up to nearest whole byte. */
+  return (bit + 7) / 8;
 }
