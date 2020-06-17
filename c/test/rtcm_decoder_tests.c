@@ -1960,10 +1960,13 @@ static void compare_keplerian_ephs(const rtcm_msg_eph *first,
   assert(first->kepler.af1 == second->kepler.af1);
   assert(first->kepler.af2 == second->kepler.af2);
   assert(first->kepler.toc == second->kepler.toc);
-  if (first->constellation != RTCM_CONSTELLATION_GAL) {
+  if ((first->constellation != RTCM_CONSTELLATION_GAL) &&
+      (first->constellation != RTCM_CONSTELLATION_BDS)) {
     assert(first->kepler.iodc == second->kepler.iodc);
   }
-  assert(first->kepler.iode == second->kepler.iode);
+  if (first->constellation != RTCM_CONSTELLATION_BDS) {
+    assert(first->kepler.iode == second->kepler.iode);
+  }
   if (first->constellation == RTCM_CONSTELLATION_GPS) {
     assert(first->kepler.codeL2 == second->kepler.codeL2);
     assert(first->kepler.L2_data_bit == second->kepler.L2_data_bit);
