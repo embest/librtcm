@@ -80,11 +80,33 @@ enum rtcm3_rc_e get_number_of_bits_for_iode(
   switch (constellation) {
     case RTCM_CONSTELLATION_GPS:
     case RTCM_CONSTELLATION_GLO:
-    case RTCM_CONSTELLATION_QZS: {
+    case RTCM_CONSTELLATION_QZS:
+    case RTCM_CONSTELLATION_BDS: {
       *num_bit = 8;
       return RC_OK;
     }
-    case RTCM_CONSTELLATION_GAL:
+    case RTCM_CONSTELLATION_GAL: {
+      *num_bit = 10;
+      return RC_OK;
+    }
+    case RTCM_CONSTELLATION_SBAS: {
+      *num_bit = 24;
+      return RC_OK;
+    }
+    case RTCM_CONSTELLATION_INVALID:
+    case RTCM_CONSTELLATION_COUNT:
+    default:
+      return RC_INVALID_MESSAGE;
+  }
+}
+
+/** Get the numbers of bits for the t modulo field
+ * \param constellation Message constellation
+ * \return Number of bits
+ */
+enum rtcm3_rc_e get_number_of_bits_for_t_modulo(
+    const rtcm_constellation_t constellation, uint8_t *num_bit) {
+  switch (constellation) {
     case RTCM_CONSTELLATION_BDS: {
       *num_bit = 10;
       return RC_OK;
@@ -93,6 +115,10 @@ enum rtcm3_rc_e get_number_of_bits_for_iode(
       *num_bit = 9;
       return RC_OK;
     }
+    case RTCM_CONSTELLATION_GPS:
+    case RTCM_CONSTELLATION_GLO:
+    case RTCM_CONSTELLATION_QZS:
+    case RTCM_CONSTELLATION_GAL:
     case RTCM_CONSTELLATION_INVALID:
     case RTCM_CONSTELLATION_COUNT:
     default:
@@ -187,18 +213,23 @@ static rtcm3_rc decode_ssr_orbit(const uint8_t buff[],
                                  uint8_t constellation,
                                  rtcm_msg_ssr_orbit_corr *orbit) {
   uint8_t number_of_bits_for_iode;
+  uint8_t number_of_bits_for_t_modulo;
+
   if (!(RC_OK ==
         get_number_of_bits_for_iode(constellation, &number_of_bits_for_iode))) {
     return RC_INVALID_MESSAGE;
   }
 
-  orbit->iode = rtcm_getbitu(buff, *bit, number_of_bits_for_iode);
-  *bit += number_of_bits_for_iode;
   if (constellation == RTCM_CONSTELLATION_BDS ||
       constellation == RTCM_CONSTELLATION_SBAS) {
-    orbit->iodcrc = rtcm_getbitu(buff, *bit, 24);
-    *bit += 24;
+    get_number_of_bits_for_t_modulo(constellation,
+                                    &number_of_bits_for_t_modulo);
+
+    rtcm_getbitu(buff, *bit, number_of_bits_for_t_modulo);
+    *bit += number_of_bits_for_t_modulo;
   }
+  orbit->iod = rtcm_getbitu(buff, *bit, number_of_bits_for_iode);
+  *bit += number_of_bits_for_iode;
 
   orbit->radial = rtcm_getbits(buff, *bit, 22);
   *bit += 22;
