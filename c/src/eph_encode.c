@@ -179,7 +179,8 @@ uint16_t rtcm3_encode_bds_eph(const rtcm_msg_eph *msg_1042, uint8_t buff[]) {
   bit += 4;
   rtcm_setbits(buff, bit, 14, msg_1042->kepler.inc_dot);
   bit += 14;
-  rtcm_setbitu(buff, bit, 5, msg_1042->kepler.iode);
+  // AODE
+  rtcm_setbitu(buff, bit, 5, 0);
   bit += 5;
   rtcm_setbitu(buff, bit, 17, msg_1042->kepler.toc);
   bit += 17;
@@ -189,7 +190,8 @@ uint16_t rtcm3_encode_bds_eph(const rtcm_msg_eph *msg_1042, uint8_t buff[]) {
   bit += 22;
   rtcm_setbits(buff, bit, 24, msg_1042->kepler.af0);
   bit += 24;
-  rtcm_setbitu(buff, bit, 5, msg_1042->kepler.iodc);
+  // AODC
+  rtcm_setbitu(buff, bit, 5, 0);
   bit += 5;
   rtcm_setbits(buff, bit, 18, msg_1042->kepler.crs);
   bit += 18;
@@ -299,7 +301,8 @@ static void rtcm3_encode_gal_eph_common(const rtcm_msg_eph *msg_eph,
  * \return  - RC_OK : Success
  *          - RC_MESSAGE_TYPE_MISMATCH : Message type mismatch
  */
-uint16_t rtcm3_encode_gal_eph_inav(const rtcm_msg_eph *msg_eph, uint8_t buff[]) {
+uint16_t rtcm3_encode_gal_eph_inav(const rtcm_msg_eph *msg_eph,
+                                   uint8_t buff[]) {
   assert(msg_eph);
 
   uint16_t bit = 0;
@@ -345,7 +348,7 @@ uint16_t rtcm3_encode_gal_eph_fnav(const rtcm_msg_eph *msg_eph,
   bit += 10;
   rtcm_setbits(buff, bit, 3, msg_eph->health_bits);
   bit += 3;
-  /* reserved */ 
+  /* reserved */
   rtcm_setbits(buff, bit, 7, 0);
   bit += 7;
 
