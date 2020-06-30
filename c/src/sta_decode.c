@@ -29,7 +29,9 @@ rtcm3_rc sta_decode_fwver(const uint8_t buff[], char *fw_ver, uint8_t len) {
   uint16_t subtype_id = rtcm_getbitu(buff, bit, 8);
   bit += 8;
   /* this should never be called on anything other than msg 999:25 */
-  assert(msg_num == 999 && subtype_id == 25);
+  if (msg_num != 999 || subtype_id != 25) {
+    return RC_INVALID_MESSAGE;
+  }
   GET_STR_LEN(buff, bit, fw_ver_strlen);
   GET_STR(buff, bit, len, fw_ver);
   fw_ver[fw_ver_strlen] = '\0';
@@ -47,6 +49,9 @@ rtcm3_rc sta_decode_rfstatus(const uint8_t buff[],
   if (bit + 8 >= len) return RC_INVALID_MESSAGE;
   rf_status->subtype_id = rtcm_getbitu(buff, bit, 8);
   assert(rf_status->msg_num == 999 && rf_status->subtype_id == 24);
+  if (rf_status->msg_num != 999 || rf_status->subtype_id != 24) {
+    return RC_INVALID_MESSAGE;
+  }
   bit += 8;
   if (bit + 30 >= len) return RC_INVALID_MESSAGE;
   rf_status->gnss_epoch_time = rtcm_getbitu(buff, bit, 30);
