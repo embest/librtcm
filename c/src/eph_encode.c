@@ -179,7 +179,7 @@ uint16_t rtcm3_encode_bds_eph(const rtcm_msg_eph *msg_1042, uint8_t buff[]) {
   bit += 4;
   rtcm_setbits(buff, bit, 14, msg_1042->kepler.inc_dot);
   bit += 14;
-  rtcm_setbitu(buff, bit, 5, msg_1042->kepler.iode);
+  rtcm_setbitu(buff, bit, 5, msg_1042->kepler.aode);
   bit += 5;
   rtcm_setbitu(buff, bit, 17, msg_1042->kepler.toc);
   bit += 17;
@@ -189,7 +189,7 @@ uint16_t rtcm3_encode_bds_eph(const rtcm_msg_eph *msg_1042, uint8_t buff[]) {
   bit += 22;
   rtcm_setbits(buff, bit, 24, msg_1042->kepler.af0);
   bit += 24;
-  rtcm_setbitu(buff, bit, 5, msg_1042->kepler.iodc);
+  rtcm_setbitu(buff, bit, 5, msg_1042->kepler.aodc);
   bit += 5;
   rtcm_setbits(buff, bit, 18, msg_1042->kepler.crs);
   bit += 18;

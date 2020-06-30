@@ -303,7 +303,7 @@ rtcm3_rc rtcm3_decode_bds_eph(const uint8_t buff[], rtcm_msg_eph *msg_eph) {
   bit += 4;
   msg_eph->kepler.inc_dot = rtcm_getbits(buff, bit, 14);
   bit += 14;
-  msg_eph->kepler.iode = rtcm_getbitu(buff, bit, 5);
+  msg_eph->kepler.aode = rtcm_getbitu(buff, bit, 5);
   bit += 5;
   msg_eph->kepler.toc = rtcm_getbitu(buff, bit, 17);
   bit += 17;
@@ -313,7 +313,7 @@ rtcm3_rc rtcm3_decode_bds_eph(const uint8_t buff[], rtcm_msg_eph *msg_eph) {
   bit += 22;
   msg_eph->kepler.af0 = rtcm_getbits(buff, bit, 24);
   bit += 24;
-  msg_eph->kepler.iodc = rtcm_getbitu(buff, bit, 5);
+  msg_eph->kepler.aodc = rtcm_getbitu(buff, bit, 5);
   bit += 5;
   msg_eph->kepler.crs = rtcm_getbits(buff, bit, 18);
   bit += 18;
